@@ -1,6 +1,7 @@
 
 from django.urls import path
 
+
 from EmployeeApp import views
 
 app_name = "EmployeeApp"

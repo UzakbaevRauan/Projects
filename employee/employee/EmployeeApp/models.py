@@ -14,8 +14,8 @@ class Person(models.Model):
     number = models.CharField(max_length=11)
     job_title = models.ForeignKey(to=Job_titles, on_delete=models.CASCADE)
     age = models.IntegerField()
-    birthday = models.DateTimeField()
-    image = models.ImageField()
+    birthday = models.DateField()
+    image = models.ImageField(upload_to='media/')
 
     
     class Meta:

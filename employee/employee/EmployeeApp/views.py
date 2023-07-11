@@ -1,20 +1,21 @@
 from django.shortcuts import render
 from EmployeeApp.models import Person,Job_titles
+import requests 
 
 # Create your views here.
 def index(request):
-    response = request.get('https://kode-frontend-team.stoplight.io/docs/koder-stoplight/e981f97438300-get-users-list')
-    data = response.json()
     context={
-        'persons':data,
-        'job_titles':data['department'],
+        'persons':Person.objects.all(),
+        'job_titles':Job_titles.objects.all(),
 
     }
-
     return render(request,'index.html',context)
 
+
 def index(request,job_title_id= None):
-    if job_title_id:
+    if job_title_id==None:
+        persons = Person.objects.all()
+    elif job_title_id >1 and job_title_id <7:
         job_title = Job_titles.objects.get(id=job_title_id)
         persons = Person.objects.filter(job_title=job_title)
     else:   
@@ -35,8 +36,10 @@ def contact(request,person_id= None):
         "persons":persons
     }
     return render(request,"contact.html",context)
+
+
 def sort_by_age(request):
-    sorted_people=Person.objects.order_by('age')
+    sorted_people=reversed(Person.objects.order_by('age'))
     context={
      'persons':sorted_people,
      'job_titles':Job_titles.objects.all(),
@@ -44,7 +47,7 @@ def sort_by_age(request):
     return render(request,'index.html',context)
 
 def search(request):
-    query = request.GET.get('query', '')  # Получаем строку поиска из GET-параметра 'query'
+    query = request.GET.get('query') 
     results = Person.objects.filter(first_name=query) 
     context={
         'persons': results,
